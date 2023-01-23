@@ -9,8 +9,8 @@ public class Customer {
         this.name=name;
         this.PIN=PIN;
 
-        savings = new Account(name + "'s Savings Account");
-        checking = new Account(name + "'s Checking Account");
+        savings = new Account(name + "'s Savings Account",this);
+        checking = new Account(name + "'s Checking Account",this);
     }
 
     public Account getSavings() {return savings;}

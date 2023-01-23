@@ -8,8 +8,8 @@ public class Account {
     private double money;
     private String name;
 
-    public Account(String name) {
-        //this.owner=owner;
+    public Account(String name, Customer owner) {
+        this.owner=owner;
         this.name=name;
         money=0;
     }
