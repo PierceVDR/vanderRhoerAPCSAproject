@@ -1,9 +1,9 @@
 public class Customer {
-    String name;
-    String PIN;
+    private String name;
+    private String PIN;
 
-    Account savings;
-    Account checking;
+    private Account savings;
+    private Account checking;
 
     public Customer(String name, String PIN) {
         this.name=name;
