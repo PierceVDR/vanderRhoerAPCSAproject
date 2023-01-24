@@ -8,15 +8,16 @@ public class ATM {
     private NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
 
     private static int lastTransactionID = 10000;
-    private static String generateTransactionInfo() {
-        lastTransactionID++;
-        return "\nTransaction ID: #" + lastTransactionID;
-    }
 
     private Customer customer;
 
     public ATM(){
         customer=null;
+    }
+
+    private static String generateTransactionInfo() {
+        lastTransactionID++;
+        return "\nTransaction ID: #" + lastTransactionID;
     }
 
     public void start() {
@@ -57,7 +58,7 @@ public class ATM {
     }
 
     private void withdraw() {
-        String transactionInfo = generateTransactionInfo();
+        String transactionInfo = generateTransactionInfo(); // Gives the transaction a unique ID for the receipt
 
         // Choosing account:
         System.out.println("\n\nAccounts:\n" +
@@ -98,7 +99,7 @@ public class ATM {
         int twentyDollarBills;
 
         System.out.println("Money will be dispensed in $5 and/or $20 bills.");
-        if (max>0) {
+        if (max>0) { // Don't need to ask if amount is less than 20
             String prompt = "Enter how many $20 bills you would like to receive";
             prompt += "\n At most " + max + " $20 bills can be dispensed";
             twentyDollarBills = getIntInRange(prompt, 0, max);
@@ -116,7 +117,10 @@ public class ATM {
             // Here, though, it just prints part of the receipt
             System.out.println(formatter.format(amount) + " successfully withdrawn from " + accountName + "!");
             System.out.println(" Remaining balance: " + account.getFormattedMoney() + transactionInfo);
-        } else {
+        } else { // This side of the if/else statement will never actually be called, but
+            // realistically transactions aren't correctly processed 100% of the time
+
+            // The other transaction methods have a similar error message too
             System.out.println("!? Error occurred; money not withdrawn !?" + transactionInfo);
         }
 
@@ -132,13 +136,13 @@ public class ATM {
         System.out.println(message);
     }
     private void deposit() {
-        String transactionInfo = generateTransactionInfo();
+        String transactionInfo = generateTransactionInfo(); // Again, this gives the transaction an ID for the receipt
 
         // Choosing account:
         System.out.println("\n\nAccounts:\n" +
                 " 1. Savings\n" +
                 " 2. Checking\n");
-        int action = getInput("Enter the number correlating to the account you would like to withdraw from",2);
+        int action = getInput("Enter the number correlating to the account you would like to deposit money into",2);
         Account account;
         if (action==1) {
             account=customer.getSavings();
@@ -155,8 +159,8 @@ public class ATM {
         // Adding money to account:
         if (amount==0) {
              System.out.println("No money deposited into " + accountName + "!" + transactionInfo);
-             returnToMenu(); // Stop early
-             return;
+             returnToMenu();
+             return; // Stop early
         } else if (account.addMoney(amount)) {
             System.out.println(formatter.format(amount) + " successfully deposited into " + accountName + "!");
             System.out.println(" " + accountName + " balance: " + account.getFormattedMoney() + transactionInfo);
@@ -176,8 +180,8 @@ public class ATM {
                 " 2. Checking\n");
         int action = getInput("Enter the number correlating to the account you would like to transfer money FROM",2);
 
-        Account savingsAccount=customer.getSavings();
-        Account checkingAccount=customer.getChecking();
+        Account savingsAccount=customer.getSavings(); // Declaring & initializing these 2 variables
+        Account checkingAccount=customer.getChecking(); // is convenient for the receipt later on
 
         Account fromAccount;
         Account toAccount;
@@ -215,8 +219,8 @@ public class ATM {
         if (fromAccount.transferMoney(amount,toAccount)) {
             System.out.println(formatter.format(amount) + " successfully transferred from " + fromAccountName + " to " + toAccountName+ "!");
             // We want to preserve the order (1) Savings and (2) Checking
-            System.out.println(" " + customer.getSavings().getName() + " balance: " + savingsAccount.getFormattedMoney());
-            System.out.println(" " + customer.getChecking().getName() + " balance: " + checkingAccount.getFormattedMoney() + transactionInfo);
+            System.out.println(" " + savingsAccount.getName() + " balance: " + savingsAccount.getFormattedMoney());
+            System.out.println(" " + checkingAccount.getName() + " balance: " + checkingAccount.getFormattedMoney() + transactionInfo);
 
         } else {
             System.out.println("!? Error occurred; money not transferred from " + fromAccountName + " to " + toAccountName +  " !?" + transactionInfo);
@@ -291,6 +295,7 @@ public class ATM {
     }
 
     private double getPositiveDouble(String prompt) { // Get positive (or zero) number with decimals
+        // This method's useful for getting quantities of money
         double n;
         while (true) {
             System.out.println(prompt);
@@ -306,7 +311,7 @@ public class ATM {
         return n;
     }
 
-    private int getIntInRange(String prompt, int min, int max) {
+    private int getIntInRange(String prompt, int min, int max) { // Like getInput, but specifically for getting quantities that are integer numbers instead of a number correlating to an action.
         double n;
         while (true) {
             System.out.println(prompt);

@@ -4,7 +4,7 @@ import java.util.Locale;
 public class Account {
     private NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
 
-    private Customer owner;
+    private Customer owner; // Required for project, but never actually used.
     private double money;
     private String name;
 
