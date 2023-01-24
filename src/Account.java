@@ -2,7 +2,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class Account {
-    private NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+    private static final NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
 
     private Customer owner; // Required for project, but never actually used.
     private double money;

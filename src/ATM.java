@@ -4,8 +4,8 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class ATM {
-    private Scanner scan = new Scanner(System.in);
-    private NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+    private static final Scanner scan = new Scanner(System.in);
+    private static final NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
 
     private static int lastTransactionID = 10000;
 
@@ -198,20 +198,15 @@ public class ATM {
         System.out.println("\n");
         // Getting amount:
         double amount;
-        while (true) {
-            amount = getPositiveDouble("Enter the amount of money you would like to transfer");
+        amount = getPositiveDouble("Enter the amount of money you would like to transfer");
 
-            if (amount>fromAccount.getMoney()) {
+        if (amount>fromAccount.getMoney()) {
                 System.out.println("Insufficient funds in " + fromAccountName + "; money not transferred!" + transactionInfo);
                 returnToMenu(); // Stop early
                 return;
-            } else if (amount==0) {
-                System.out.println("No money transferred from " + fromAccountName + " to " + toAccountName + "!" + transactionInfo);
-                returnToMenu(); // Stop early
-                return;
-            } else {
-                break;
-            }
+        } else if (amount==0) {
+            System.out.println("No money transferred from " + fromAccountName + " to " + toAccountName + "!" + transactionInfo);returnToMenu(); // Stop early
+            return;
         }
 
         System.out.println("\n");
@@ -279,7 +274,7 @@ public class ATM {
 
     // Helper method for getting the integer input
     private int getInput(String prompt, int maxNum) { // For a list of actions
-        double action=0;
+        double action;
         while (true) {
             System.out.println(prompt);
             System.out.print(" > ");
